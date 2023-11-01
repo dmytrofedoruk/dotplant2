@@ -1,0 +1,57 @@
+namespace: dotplant2
+dotplant2:
+  defines: runnable
+  metadata:
+    name: dotplant2
+    description: open-source E-Commerce CMS based on Yii Framework 2
+    icon: https://emojiapi.dev/api/v1/robot.svg
+  containers:
+    dotplant2:
+      build: .
+      dockerfile: generate
+  services:
+    default:
+      container: dotplant2
+      port: 80
+      host-port: 80
+      publish: false
+      protocol: TCP
+      description: Default web server port
+  connections:
+    mysql:
+      target: dotplant2/db
+      service: monk-mysql-db
+  variables:
+    db-host:
+      env: DB_HOST
+      type: string
+      description: Database host
+      value: localhost
+    db-user:
+      env: DB_USER
+      type: string
+      description: Database user
+      value: root
+    db-password:
+      env: DB_PASSWORD
+      type: string
+      description: Database password
+      value: '!!!SETME-USE-SECRETS!!!'
+    db-name:
+      env: DB_NAME
+      type: string
+      description: Database name
+      value: dotplant2
+    cookie-validation-key:
+      env: COOKIE_VALIDATION_KEY
+      type: string
+      description: Key used for cookie validation
+      value: '!!!SETME-USE-SECRETS!!!'
+db:
+  defines: runnable
+  inherits: monk-mysql/db
+stack:
+  defines: group
+  members:
+    - dotplant2/dotplant2
+    - dotplant2/db
